@@ -1,0 +1,13 @@
+{
+  "name": "@ziemniakoss/cspell-bitbucket-code-insights-reporter",
+  "version": "0.5.0",
+  "main": "src/index.js",
+  "scripts": {
+  },
+  "author": "ziemniakoss",
+  "license": "MIT",
+  "description": "Reporter for CSPell that generates",
+  "dependencies": {
+    "@cspell/cspell-types": "^8.17.3"
+  }
+}
