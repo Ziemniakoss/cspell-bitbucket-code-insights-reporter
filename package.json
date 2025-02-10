@@ -1,13 +1,19 @@
 {
   "name": "@ziemniakoss/cspell-bitbucket-code-insights-reporter",
-  "version": "0.5.0",
+  "version": "0.0.1",
   "main": "src/index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "ziemniakoss",
   "license": "MIT",
   "description": "Reporter for CSPell that generates",
   "dependencies": {
-    "@cspell/cspell-types": "^8.17.3"
+    "@cspell/cspell-types": "^8.17.3",
+    "http-proxy-agent": "^7.0.2",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "cspell": "^8.17.3",
+    "prettier": "3.4.2"
   }
 }
