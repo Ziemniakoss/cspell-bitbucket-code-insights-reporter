@@ -4,7 +4,7 @@ import { spawn } from "child_process";
 const API_URL = "http://api.bitbucket.org/2.0/repositories";
 const ENV_REPOSITORY_NAME = "BITBUCKET_REPO_FULL_NAME";
 const ENV_COMMIT_HASH = "BITBUCKET_COMMIT";
-const BB_PROXY = "http://host.docker.internal:29418";
+const BB_PROXY =  "http://localhost:29418"
 
 const REPO_NAME = process.env[ENV_REPOSITORY_NAME];
 const COMMIT = process.env[ENV_COMMIT_HASH];

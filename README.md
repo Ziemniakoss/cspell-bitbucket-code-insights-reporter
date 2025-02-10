@@ -1,5 +1,7 @@
 # Code insights integration for CSpell
 
+This package is under consutruction and does not work in current form
+
 ## Usage
 
 In your CI scripts that verify code using CSpell, add flag
