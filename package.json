@@ -12,12 +12,12 @@
   "license": "MIT",
   "description": "Reporter for CSPell that generates",
   "dependencies": {
-    "@cspell/cspell-types": "^8.17.3",
-    "typescript": "^5.7.3"
+    "@cspell/cspell-types": "^8.17.3"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",
     "cspell": "^8.17.3",
-    "prettier": "3.4.2"
+    "prettier": "3.4.2",
+    "typescript": "^5.7.3"
   }
 }
