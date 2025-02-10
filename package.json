@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "main": "dist/index.js",
   "scripts": {
-    "prepack": "npx tsc"
+    "prepack": " npx --package typescript tsc"
   },
   "publishConfig": {
     "access": "public"
