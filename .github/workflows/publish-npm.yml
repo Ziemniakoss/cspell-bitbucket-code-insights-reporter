@@ -4,6 +4,7 @@ jobs:
   publish-new-version:
     runs-on: ubuntu-latest
     name: Publish new version
+    environment: "NPM"
     steps:
       - uses: actions/checkout@v3
         name: "Checkout code"
