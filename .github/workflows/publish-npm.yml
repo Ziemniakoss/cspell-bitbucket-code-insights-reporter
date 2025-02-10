@@ -15,7 +15,7 @@ jobs:
           node-version: 18
           registry-url: "https://registry.npmjs.org"
           always-auth: true
-      - run: sh scripts/deploy.sh
+      - run: npm publish 
         name: "Publish to registry"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
