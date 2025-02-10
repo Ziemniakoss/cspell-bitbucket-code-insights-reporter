@@ -1,8 +1,10 @@
 {
   "name": "@ziemniakoss/cspell-bitbucket-code-insights-reporter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "src/index.js",
-  "scripts": {},
+  "scripts": {
+    "prepublish": "npx tsc ."
+  },
   "author": "ziemniakoss",
   "license": "MIT",
   "description": "Reporter for CSPell that generates",
