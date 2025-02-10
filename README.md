@@ -3,6 +3,7 @@
 ## Usage
 
 In your CI scripts that verify code using CSpell, add flag
+
 ```sh
  --reporter @ziemniakoss/cspell-bitbucket-code-insights-reporter
 ```
@@ -16,4 +17,4 @@ npx cspell . --reporter @ziemniakoss/cspell-bitbucket-code-insights-reporter
 ## Requirements
 
 This reporter needs `curl` to be installed and in `PATH`.
-This is required because Code Insights API can skip authorization in CI but only if we proxy requests through `http://host.docker.internal:29418` and proxy is not supported in node fetch API.
+This is required because Code Insights API can skip authorization in CI but only if we proxy requests through `http://host.docker.internal:29418` and proxy is not supported in node fetch API and I decided that I dont want to introduce additonal .
