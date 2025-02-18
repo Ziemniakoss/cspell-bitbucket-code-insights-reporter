@@ -1,5 +1,8 @@
 name: "Publish NPM"
-on: workflow_dispatch
+on:
+  push: 
+    branches: 
+      - main
 jobs:
     publish-new-version:
         runs-on: ubuntu-latest

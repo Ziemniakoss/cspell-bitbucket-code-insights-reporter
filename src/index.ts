@@ -66,7 +66,9 @@ async function createAnnotations(spellingIssues: Issue[]) {
     console.log(annotationBatches)
     const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}/annotations`;
     const promises = annotationBatches.map((batch) => {
-        return callBitbucketApiCurl(endpoint, "PUT", batch).catch(error => console.error("BB Code Insights Annotation creation problem", error))
+        return callBitbucketApiCurl(endpoint, "PUT", batch)
+            .then(commandResult => console.log(commandResult))
+            .catch(error => console.error("BB Code Insights Annotation creation problem", error))
     });
     return Promise.all(promises);
 }
