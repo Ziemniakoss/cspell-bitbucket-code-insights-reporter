@@ -8,5 +8,5 @@ export interface CodeInsightAnnotation {
     severity: "LOW" | "MEDIUM" | "HIGH";
     annotation_type: "VULNERABILITY" | "CODE_SMELL" | "BUG";
     details: string | null;
-    external_id: string
+    external_id: string;
 }

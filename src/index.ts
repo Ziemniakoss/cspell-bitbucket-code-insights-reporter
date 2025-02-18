@@ -44,24 +44,24 @@ async function createCodeInsightsReport(runResult: RunResult) {
             {
                 title: "Scanned files",
                 value: runResult.files,
-                type: "NUMBER"
+                type: "NUMBER",
             },
             {
                 title: "Files with errors",
                 value: runResult.filesWithIssues.size,
-                type: "NUMBER"
+                type: "NUMBER",
             },
             {
                 title: "Total issues count",
                 value: runResult.issues,
-                type: "NUMBER"
+                type: "NUMBER",
             },
             {
                 title: "Total errors count",
                 value: runResult.errors,
-                type: "NUMBER"
+                type: "NUMBER",
             },
-        ]
+        ],
     };
     const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}`;
     return callBitbucketApiCurl(endpoint, "PUT", report).catch((error) => console.error("ERR", error));
@@ -80,7 +80,7 @@ async function createAnnotations(spellingIssues: Issue[]) {
             details,
             path: getRelativePath(issue.uri ?? ""),
             line: issue.row,
-            external_id: `cspell_${index++}`
+            external_id: `cspell_${index++}`,
         };
     });
     const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
