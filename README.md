@@ -4,6 +4,8 @@ Unofficial package fro report generation for CSpell>
 
 ![img.png](img/annotations_example.png)
 
+![img.png](img/report_view.png)
+
 ## Usage
 
 In your CI scripts that verify code using CSpell, add flag

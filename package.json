@@ -1,6 +1,6 @@
 {
     "name": "@ziemniakoss/cspell-bitbucket-code-insights-reporter",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "main": "dist/src/index.js",
     "scripts": {
         "prepack": "npx tsc",
@@ -12,7 +12,7 @@
     "type": "commonjs",
     "author": "ziemniakoss",
     "license": "MIT",
-    "description": "Reporter for CSPell that generates",
+    "description": "Reporter for CSPell that generates Code Insights in Bitbucket",
     "dependencies": {
         "@cspell/cspell-types": "^8.17.3"
     },
