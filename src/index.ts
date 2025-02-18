@@ -1,7 +1,7 @@
 import type { CSpellReporter, Issue, RunResult } from "@cspell/cspell-types";
 import { CodeInsightReport } from "./codeInsightReport";
 import { CodeInsightAnnotation } from "./codeInsightAnnotation";
-import { callBitbucketApiCurl, chunk, runCommand } from "./utils";
+import {callBitbucketApiCurl, chunk, getRelativePath, runCommand} from "./utils";
 
 const ENV_REPOSITORY_NAME = "BITBUCKET_REPO_FULL_NAME";
 const ENV_COMMIT_HASH = "BITBUCKET_COMMIT";
@@ -48,8 +48,6 @@ async function createCodeInsightsReport(runResult: RunResult) {
 }
 
 async function createAnnotations(spellingIssues: Issue[]) {
-    console.log(spellingIssues[0].uri);
-    // TODO uri -> path?
     // @ts-ignore
     const annotations: CodeInsightAnnotation[] = spellingIssues.map((issue) => {
         const details =
@@ -60,14 +58,15 @@ async function createAnnotations(spellingIssues: Issue[]) {
             type: "CODE_SMELL",
             message,
             details,
-            path: issue.uri,
+            path: getRelativePath(issue.uri ??""),
             line: issue.line,
         };
     });
     const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
+    console.log(annotationBatches)
     const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}/annotations`;
     const promises = annotationBatches.map((batch) => {
-        return callBitbucketApiCurl(endpoint, "PUT", batch);
+        return callBitbucketApiCurl(endpoint, "PUT", batch).catch(error => console.error("BB Code Insights Annotation creation problem", error))
     });
     return Promise.all(promises);
 }
