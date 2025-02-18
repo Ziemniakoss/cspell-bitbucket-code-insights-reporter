@@ -1,7 +1,7 @@
 import type { CSpellReporter, Issue, RunResult } from "@cspell/cspell-types";
 import { CodeInsightReport } from "./codeInsightReport";
 import { CodeInsightAnnotation } from "./codeInsightAnnotation";
-import {callBitbucketApiCurl, chunk, getRelativePath, runCommand} from "./utils";
+import { callBitbucketApiCurl, chunk, getRelativePath, runCommand } from "./utils";
 
 const ENV_REPOSITORY_NAME = "BITBUCKET_REPO_FULL_NAME";
 const ENV_COMMIT_HASH = "BITBUCKET_COMMIT";
@@ -27,9 +27,8 @@ export function getReporter(settings: unknown, cliOptions?: unknown): Required<C
             return createCodeInsightsReport(result)
                 .then(() => createAnnotations(spellingIssues))
                 .catch((error) => {
-                    console.error("Error occurred while trying create BB Code Insights", error)
-                    }
-                );
+                    console.error("Error occurred while trying create BB Code Insights", error);
+                });
         },
     };
 }
@@ -58,17 +57,17 @@ async function createAnnotations(spellingIssues: Issue[]) {
             type: "CODE_SMELL",
             message,
             details,
-            path: getRelativePath(issue.uri ??""),
+            path: getRelativePath(issue.uri ?? ""),
             line: issue.line.offset,
         };
     });
     const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
-    console.log(annotationBatches)
+    console.log(annotationBatches);
     const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}/annotations`;
     const promises = annotationBatches.map((batch) => {
-        return callBitbucketApiCurl(endpoint, "PUT", batch)
-            .then(commandResult => console.log(commandResult))
-            .catch(error => console.error("BB Code Insights Annotation creation problem", error))
+        return callBitbucketApiCurl(endpoint, "POST", batch)
+            .then((commandResult) => console.log(commandResult))
+            .catch((error) => console.error("BB Code Insights Annotation creation problem", error));
     });
     return Promise.all(promises);
 }

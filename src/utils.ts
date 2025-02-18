@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import { fileURLToPath, pathToFileURL } from "url";
+import { fileURLToPath } from "url";
 import { relative } from "path";
 
 const API_URL = "http://api.bitbucket.org/2.0/repositories";
@@ -54,7 +54,7 @@ export async function runCommand(
  * @param method HTTP method to be used
  * @param body object to be serialized as JSON
  */
-export async function callBitbucketApiCurl(endpoint: string, method: "PUT" | "PUSH" | "DELETE", body: any) {
+export async function callBitbucketApiCurl(endpoint: string, method: "PUT" | "POST" | "DELETE", body: any) {
     const url = `${API_URL}${endpoint}`;
     return runCommand("curl", [
         "--proxy",

@@ -7,4 +7,3 @@ describe("Calculator Tests", () => {
         assert.equal(result, 5);
     });
 });
-

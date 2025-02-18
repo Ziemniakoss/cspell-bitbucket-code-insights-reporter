@@ -1,8 +1,8 @@
 name: "Publish NPM"
 on:
-  push: 
-    branches: 
-      - main
+    push:
+        branches:
+            - main
 jobs:
     publish-new-version:
         runs-on: ubuntu-latest
