@@ -84,11 +84,9 @@ async function createAnnotations(spellingIssues: Issue[]) {
         };
     });
     const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
-    console.log(annotationBatches);
     const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}/annotations`;
     const promises = annotationBatches.map((batch) => {
         return callBitbucketApiCurl(endpoint, "POST", batch)
-            .then((commandResult) => console.log(commandResult))
             .catch((error) => console.error("BB Code Insights Annotation creation problem", error));
     });
     return Promise.all(promises);
