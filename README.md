@@ -1,6 +1,8 @@
 # Code insights integration for CSpell
 
+Unofficial package fro report generation for CSpell>
 
+![img.png](img/annotations_example.png)
 
 ## Usage
 
@@ -19,4 +21,4 @@ npx cspell . --reporter @ziemniakoss/cspell-bitbucket-code-insights-reporter
 ## Requirements
 
 This reporter needs `curl` to be installed and in `PATH`.
-This is required because Code Insights API can skip authorization in CI but only if we proxy requests through `http://host.docker.internal:29418` and proxy is not supported in node fetch API and I decided that I dont want to introduce additonal .
+This is required because Code Insights API can skip authorization in CI but only if using HTTP proxy requests, which are currently not supported by native JS API.

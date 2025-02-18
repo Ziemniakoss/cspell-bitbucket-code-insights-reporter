@@ -36,11 +36,32 @@ export function getReporter(settings: unknown, cliOptions?: unknown): Required<C
 async function createCodeInsightsReport(runResult: RunResult) {
     const report: CodeInsightReport = {
         result: runResult.issues > 0 ? "FAILED" : "PASSED",
-        data: [],
         report_type: "BUG",
         title: "CSpell report",
         details: runResult.issues == 0 ? "No spelling issues found" : `${runResult.issues} spelling issues found`,
         external_id: null,
+        data: [
+            {
+                title: "Scanned files",
+                value: runResult.files,
+                type: "NUMBER"
+            },
+            {
+                title: "Files with errors",
+                value: runResult.filesWithIssues.size,
+                type: "NUMBER"
+            },
+            {
+                title: "Total issues count",
+                value: runResult.issues,
+                type: "NUMBER"
+            },
+            {
+                title: "Total errors count",
+                value: runResult.errors,
+                type: "NUMBER"
+            },
+        ]
     };
     const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}`;
     return callBitbucketApiCurl(endpoint, "PUT", report).catch((error) => console.error("ERR", error));
