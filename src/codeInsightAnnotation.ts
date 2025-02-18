@@ -7,6 +7,6 @@ export interface CodeInsightAnnotation {
     message: string;
     severity: "LOW" | "MEDIUM" | "HIGH";
     type: "VULNERABILITY" | "CODE_SMELL" | "BUG";
-    details: string;
-    external_id: string | null;
+    details: string | null;
+    external_id: string
 }
