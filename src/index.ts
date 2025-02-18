@@ -54,8 +54,8 @@ async function createAnnotations(spellingIssues: Issue[]) {
         const message = `Unknown word: ${issue.text}`;
         return {
             severity: "HIGH",
-            type: "CODE_SMELL",
-            message,
+            annotation_type: "CODE_SMELL",
+            summary: message,
             details,
             path: getRelativePath(issue.uri ?? ""),
             line: issue.line.offset,
