@@ -47,7 +47,7 @@ async function createCodeInsightsReport(runResult: RunResult) {
 }
 
 async function createAnnotations(spellingIssues: Issue[]) {
-    // @ts-ignore
+    let index = 0;
     const annotations: CodeInsightAnnotation[] = spellingIssues.map((issue) => {
         const details =
             issue.suggestions != null ? `Consider using one of these: ` + issue.suggestions.join(",") : null;
@@ -59,6 +59,7 @@ async function createAnnotations(spellingIssues: Issue[]) {
             details,
             path: getRelativePath(issue.uri ?? ""),
             line: issue.line.offset,
+            external_id: `cspell_${index++}`
         };
     });
     const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
