@@ -58,7 +58,7 @@ async function createAnnotations(spellingIssues: Issue[]) {
             summary: message,
             details,
             path: getRelativePath(issue.uri ?? ""),
-            line: issue.line.offset,
+            line: issue.row,
             external_id: `cspell_${index++}`
         };
     });
