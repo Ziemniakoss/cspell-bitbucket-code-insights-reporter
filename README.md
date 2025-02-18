@@ -1,6 +1,6 @@
 # Code insights integration for CSpell
 
-This package is under consutruction and does not work in current form
+This package is under construction and does not work in current form
 
 ## Usage
 

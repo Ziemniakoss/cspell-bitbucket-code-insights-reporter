@@ -1,107 +1,70 @@
 import type { CSpellReporter, Issue, RunResult } from "@cspell/cspell-types";
-import { spawn } from "child_process";
+import { CodeInsightReport } from "./codeInsightReport";
+import { CodeInsightAnnotation } from "./codeInsightAnnotation";
+import { callBitbucketApiCurl, chunk, runCommand } from "./utils";
 
-const API_URL = "http://api.bitbucket.org/2.0/repositories";
 const ENV_REPOSITORY_NAME = "BITBUCKET_REPO_FULL_NAME";
 const ENV_COMMIT_HASH = "BITBUCKET_COMMIT";
-const BB_PROXY =  "http://localhost:29418"
 
 const REPO_NAME = process.env[ENV_REPOSITORY_NAME];
 const COMMIT = process.env[ENV_COMMIT_HASH];
 
-export function getReporter(
-  settings: unknown,
-  cliOptions?: unknown,
-): Required<CSpellReporter> {
-  const reportData = {};
-  const spellingIssues: Issue[] = [];
-  return {
-    issue: (issue) => {
-      spellingIssues.push(issue);
-    },
-    debug: () => {},
-    progress: () => {},
-    error: () => {},
-    info: () => {},
-    result: async (result) => {
-      return createCodeInsightsReport(result)
-        .then(() => createAnnotations(spellingIssues))
-        .catch((error) => {
-          console.error("Error occured:");
-          console.error(error);
-        });
-    },
-  };
+const BATCH_SIZE_LIMIT = 100;
+const REPORT_ID = "spell";
+
+export function getReporter(settings: unknown, cliOptions?: unknown): Required<CSpellReporter> {
+    const spellingIssues: Issue[] = [];
+    return {
+        issue: (issue) => {
+            spellingIssues.push(issue);
+        },
+        debug: () => {},
+        progress: () => {},
+        error: () => {},
+        info: () => {},
+        // @ts-ignore
+        result: async (result) => {
+            return createCodeInsightsReport(result)
+                .then(() => createAnnotations(spellingIssues))
+                .catch((ignored) => {});
+        },
+    };
 }
 
 async function createCodeInsightsReport(runResult: RunResult) {
-  const report: CodeInsightReport = {
-    result: runResult.issues > 0 ? "FAILED" : "PASSED",
-    data: [],
-    report_type: "BUG",
-    title: "CSpell report",
-    details:
-      runResult.issues == 0
-        ? "No spelling issues found"
-        : `${runResult.issues} spelling issues found`,
-    external_id: null,
-  };
-  const url = `${API_URL}/${REPO_NAME}/commit/${COMMIT}/reports/cspell`;
-  return runCommand("curl", [
-    "--proxy",
-    BB_PROXY,
-    "--request",
-    "PUT",
-    url,
-    "--header",
-    "Content-Type: application/json",
-    "--data-raw",
-    JSON.stringify(report),
-  ]).then((data) => {
-    console.log(data);
-  });
+    const report: CodeInsightReport = {
+        result: runResult.issues > 0 ? "FAILED" : "PASSED",
+        data: [],
+        report_type: "BUG",
+        title: "CSpell report",
+        details: runResult.issues == 0 ? "No spelling issues found" : `${runResult.issues} spelling issues found`,
+        external_id: null,
+    };
+    const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}`;
+    return callBitbucketApiCurl(endpoint, "PUT", report).catch((error) => console.error("ERR", error));
 }
 
-async function createAnnotations(spellingIssues: Issue[]) {}
-
-interface CodeInsightAnnotation {
-  path: string;
-  line: number;
-  message: string;
-  severity: "LOW" | "MEDIUM" | "HIGH";
-  type: "VULNERABILITY" | "CODE_SMELL" | "BUG";
-  details: string;
-  external_id: string | null;
-}
-
-interface CodeInsightReport {
-  title: string;
-  details: string;
-  external_id: string | null;
-  report_type: "SECURITY" | "COVERAGE" | "TEST" | "BUG" | "UNKNOWN";
-  result: "FAILED" | "PASSED" | "PENDING" | "UNKNOWN";
-  data: any[];
-}
-
-async function runCommand(command: string, args: string[]) {
-  const process = spawn(command, args);
-  let stdOut = "";
-  let stdErr = "";
-  process.stdout.on("data", (data) => {
-    stdOut += data.toString();
-  });
-  process.stderr.on("data", (data) => {
-    stdErr += data.toString();
-  });
-
-  return new Promise((resolve, reject) => {
-    process.on("exit", (code) => {
-      const returnedData = { stdErr, stdOut, code };
-      if (code == 0) {
-        resolve(returnedData);
-      } else {
-        reject(returnedData);
-      }
+async function createAnnotations(spellingIssues: Issue[]) {
+    console.log(spellingIssues[0].uri);
+    // TODO uri -> path?
+    // @ts-ignore
+    const annotations: CodeInsightAnnotation[] = spellingIssues.map((issue) => {
+        const details =
+            issue.suggestions != null ? `Consider using one of these: ` + issue.suggestions.join(",") : null;
+        const message = `Unknown word: ${issue.text}`;
+        return {
+            severity: "HIGH",
+            type: "CODE_SMELL",
+            message,
+            details,
+            path: issue.uri,
+            line: issue.line,
+        };
     });
-  });
+    const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
+    const endpoint = `/${REPO_NAME}/commit/${COMMIT}/reports/${REPORT_ID}/annotations`;
+    const promises = annotationBatches.map((batch) => {
+        return callBitbucketApiCurl(endpoint, "PUT", batch);
+    });
+    return Promise.all(promises);
 }
