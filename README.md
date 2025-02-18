@@ -2,9 +2,9 @@
 
 Unofficial package fro report generation for CSpell>
 
-![img.png](img/annotations_example.png)
+![img.png](./img/annotations_example.png)
 
-![img.png](img/report_view.png)
+![img.png](./img/report_view.png)
 
 ## Usage
 

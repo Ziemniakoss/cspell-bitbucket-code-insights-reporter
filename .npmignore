@@ -5,4 +5,5 @@ src
 cspell.json
 node_modules
 dist/test
+test
 tsconfig.json

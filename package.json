@@ -1,6 +1,6 @@
 {
     "name": "@ziemniakoss/cspell-bitbucket-code-insights-reporter",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "main": "dist/src/index.js",
     "scripts": {
         "prepack": "npx tsc",
@@ -9,6 +9,7 @@
     "publishConfig": {
         "access": "public"
     },
+    "readme": "README.md",
     "type": "commonjs",
     "author": "ziemniakoss",
     "license": "MIT",
