@@ -26,7 +26,10 @@ export function getReporter(settings: unknown, cliOptions?: unknown): Required<C
         result: async (result) => {
             return createCodeInsightsReport(result)
                 .then(() => createAnnotations(spellingIssues))
-                .catch((ignored) => {});
+                .catch((error) => {
+                    console.error("Error occurred while trying create BB Code Insights", error)
+                    }
+                );
         },
     };
 }
