@@ -69,7 +69,7 @@ export async function callBitbucketApiCurl(endpoint: string, method: "PUT" | "PU
     ]);
 }
 
-export async function getRelativePath(fileUri: string, basePath: string = ".") {
+export function getRelativePath(fileUri: string, basePath: string = ".") {
     const filePth = fileURLToPath(fileUri);
     return relative(basePath, filePth);
 }

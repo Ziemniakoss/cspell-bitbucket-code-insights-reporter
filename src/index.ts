@@ -59,7 +59,7 @@ async function createAnnotations(spellingIssues: Issue[]) {
             message,
             details,
             path: getRelativePath(issue.uri ??""),
-            line: issue.line,
+            line: issue.line.offset,
         };
     });
     const annotationBatches = chunk(annotations, BATCH_SIZE_LIMIT);
